@@ -6,7 +6,10 @@
 #include "sys_timer.h"
 #include "sys_tasks.h"
 
-volatile controlADC_t controlADC;
+xQueueHandle xQ_FlowRate;
+xQueueHandle xQ_LightState;
+xTimerHandle xTIM_ADC_Sampler;
+xTimerHandle xTIM_Light_Timer;
 
 
 /*-----------------------------------------------------------*/
@@ -14,17 +17,16 @@ volatile controlADC_t controlADC;
 int main(void)
 {
 	// ==> GPIO initialization
-	sys_GPIO_init();
+ 	sys_GPIO_init();
 
 	// ==> ADC initialization
 	sys_ADC_init();
 
-	// ==> RTOS SW Timer initialization
-	my_SW_TIM_Init();
-
 	// ==> RTOS Task initialization
 	my_TASK_Init();
 
+	// ==> RTOS SW Timer initialization
+	my_SW_TIM_Init();
 
 	/* Start the tasks and timer running. */
 	printf("~~~ PROGRAM START ~~~\n");
@@ -35,27 +37,6 @@ int main(void)
 	printf("WARNING!! Main Exiting...\n");
 	return 0;
 }
-
-
-/// =========================
-
-void ADC_IRQHandler(void)
-{
-	uint16_t adc_value = 0;
-	//portBASE_TYPE xHigherPriorityTaskWoken;
-
-	// ==> Check if ADC EOC is indeed finished.
-	if (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC))
-	{
-		// ==> Retrieved value is between [0, 4096]
-		adc_value = ADC_GetConversionValue(ADC1);
-
-		controlADC.flowRate = adc_value / 32;
-		controlADC.adcStatus = ADC_CONVERSION_OFF;
-	}
-}
-
-/*-----------------------------------------------------------*/
 
 
 /*-----------------------------------------------------------*/

@@ -31,24 +31,22 @@
 #define GPIO_SHIFT_CLOCK 	GPIO_Pin_7
 #define GPIO_SHIFT_RESET 	GPIO_Pin_8
 
-typedef union
-{
-	struct
-	{
-		uint8_t flowRate  : 7;
-		uint8_t adcStatus : 1;
-	};
-	uint8_t bits;
-} controlADC_t;
-
+#define ADC_VALUE_INIT	   (0)
 #define MAX_ADC_VALUE      (128)
 #define ADC_CONVERSION_ON  (1)
 #define ADC_CONVERSION_OFF (!ADC_CONVERSION_ON)
 
+
 #define SIMULATED_CARS 	   (19)
 #define CAR_SPEED_MS 	   (500)
+#define MINIMUM_FLOW	   (6)
 
-extern volatile controlADC_t controlADC;
+extern xQueueHandle xQ_LightState;
+extern xQueueHandle xQ_FlowRate;
+
+#define QUEUE_LENGTH 	   (1)
+#define QUEUE_ITEM_SIZE    (sizeof(uint8_t))
+
 
 void sys_GPIO_init( void );
 void sys_ADC_init( void);

@@ -20,7 +20,6 @@ typedef enum
 	MAX_STATE     		 = 0b00001000,
 } systemStates_e;
 
-extern volatile uint8_t  g_CurrentLState;
 extern EventGroupHandle_t xEVT_FSM_Transition;;
 
 // == > FSM UTILITY MACROS

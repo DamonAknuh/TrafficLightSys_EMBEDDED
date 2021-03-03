@@ -40,11 +40,11 @@ void sys_GPIO_init( void )
 	GPIO_ResetBits(TRAFFIC_PORT, GPIO_LED_GREEN);
 	GPIO_ResetBits(TRAFFIC_PORT, GPIO_LED_YELLOW);
 
-
 	// ==> Reset Shift registers
 	GPIO_ResetBits(TRAFFIC_PORT, GPIO_SHIFT_RESET);
 	GPIO_SetBits(TRAFFIC_PORT, GPIO_SHIFT_RESET);
 
+	// ==> Enable the RNG system
 	RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_RNG, ENABLE);
 	RNG_Cmd(ENABLE);
 }
@@ -67,12 +67,6 @@ void sys_ADC_init( void)
 	GPIO_InitStructureADC.GPIO_Speed 	= GPIO_Speed_25MHz;
 	GPIO_Init(GPIOC, &GPIO_InitStructureADC);
 
-	ADC1->CR1 |= ADC_CR1_EOCIE;
-	//==> Set ADC completion priority to 1
-	NVIC_SetPriority(ADC_IRQn, 0);
-	// ==> Enable the ADC Completion ISR
-	NVIC_EnableIRQ(ADC_IRQn);
-
 	// ==> Initialize the ADC system
 	ADC_InitStructure.ADC_NbrOfConversion 		= 1;
 	ADC_InitStructure.ADC_ContinuousConvMode 	= DISABLE;
@@ -84,6 +78,7 @@ void sys_ADC_init( void)
 	ADC_Init(ADC1, &ADC_InitStructure);
 
 	ADC_Cmd(ADC1, ENABLE);
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_13, 1, ADC_SampleTime_84Cycles);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_13, 1, ADC_SampleTime_144Cycles);
+
 }
 
