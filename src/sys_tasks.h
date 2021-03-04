@@ -15,15 +15,15 @@
 typedef enum
 {
     GREEN_STATE          = 0b00000001, // 1
-	YELLOW_STATE		 = 0b00000010,
-	RED_STATE			 = 0b00000100,
-	MAX_STATE     		 = 0b00001000,
+    YELLOW_STATE         = 0b00000010,
+    RED_STATE            = 0b00000100,
+    MAX_STATE            = 0b00001000,
 } systemStates_e;
 
 extern EventGroupHandle_t xEVT_FSM_Transition;;
 
 // == > FSM UTILITY MACROS
-#define GET_CUR_STATE()			  (g_CurrentLState)
+#define GET_CUR_STATE()           (g_CurrentLState)
 #define TRIGGER_STATE(STATE)      (g_CurrentLState = STATE)
 #define TOGGLE_STATE(STATE)       (g_CurrentLState ^= STATE)
 #define EVAL_STATE(reg, STATE)    (reg & STATE)
